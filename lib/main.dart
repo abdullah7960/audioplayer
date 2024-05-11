@@ -1,11 +1,22 @@
+import 'package:audio_player/viewmodels/audio_handler.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app_routes.dart';
 import 'viewmodels/audio_player_view_model.dart';
 import 'views/audio_player_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+late AudioHandler _audioHandler;
+Future<void> main() async {
+  // store this in a singleton
+  _audioHandler = await AudioService.init(
+    builder: () => MyAudioHandler(),
+    config: AudioServiceConfig(
+      androidNotificationChannelId: 'com.mycompany.myapp.channel.audio',
+      androidNotificationChannelName: 'Music playback',
+    ),
+  );
+  runApp(new MyApp());
 }
 
 class MyApp extends StatelessWidget {
